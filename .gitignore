@@ -30,3 +30,7 @@
 *.exe
 *.out
 *.app
+
+# FASTQ/FASTA
+*.fq
+*.fa
