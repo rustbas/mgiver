@@ -34,3 +34,6 @@
 # FASTQ/FASTA
 *.fq
 *.fa
+
+# Compressed files
+*.mgiver*
