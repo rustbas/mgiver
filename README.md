@@ -27,6 +27,7 @@ To decoded `fq` file type (for expample there are `mgiver` files with prefix `fa
 
 # TODO
 
+- [x] Implement **Huffman's coding**-algorithm
 - [ ] Implement **range coding**-algorithm
 - [ ] Implement **ANS**-algorithm
 - [ ] Add choice of what FASTQ-file's part encode with what algorithm
