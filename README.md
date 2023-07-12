@@ -32,3 +32,4 @@ To decoded `fq` file type (for expample there are `mgiver` files with prefix `fa
 - [ ] Implement **ANS**-algorithm
 - [ ] Add choice of what FASTQ-file's part encode with what algorithm
 - [ ] Add uniting all `mgiver` files with tar
+- [ ] Use `bitset` 
