@@ -55,7 +55,11 @@ void encode(string prefix,
   string str;
 
   for (auto line: arr){
-    str = str + line + "\n";
+    // str = str + line + "\n";
+    for (auto ch: line) {
+      str.push_back(ch);
+    }
+    str.push_back('\n');
   }
 
   // cout << arr[0] << endl;
@@ -131,17 +135,17 @@ vector<string> decode(string prefix) {
   };
 
   for (char ch: buffer) {
-    word += string(1, ch);
+    word.push_back(ch);
 
     if (find(alS.begin(), alS.end(), word) != alS.end() &&
 	reverseDict[word] != '\n') {
-      line += reverseDict[word];
-      word = "";
+      line.push_back(reverseDict[word]);
+      word.clear();
     } else if (reverseDict[word] == '\n'){
       result.push_back(line);
       // cerr << line << endl;
-      line = "";
-      word = "";
+      line.clear();
+      word.clear();
     } else {
     }
 

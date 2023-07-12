@@ -82,18 +82,22 @@ int main(int argc, char *argv[]) {
     HuffmanCodes(createHashmap(reads));
     encode(READ_PREFIX+FILENAME+SUFFIX, reads, huffmanCode);
 
-    while (!huffmanCode.empty())
-      {
-	huffmanCode.erase(huffmanCode.begin());
-      }
+    // while (!huffmanCode.empty())
+    //   {
+    // 	huffmanCode.erase(huffmanCode.begin());
+    //   }
+    
+    huffmanCode.clear();
     
     HuffmanCodes(createHashmap(quality));    
     encode(QUAL_PREFIX+FILENAME+SUFFIX, quality, huffmanCode);
 
-    while (!huffmanCode.empty())
-      {
-	huffmanCode.erase(huffmanCode.begin());
-      }
+    // while (!huffmanCode.empty())
+    //   {
+    // 	huffmanCode.erase(huffmanCode.begin());
+    //   }
+
+    huffmanCode.clear();
    
     HuffmanCodes(createHashmap(headers));
     encode(HEAD_PREFIX+FILENAME+SUFFIX, headers, huffmanCode);
