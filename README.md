@@ -12,18 +12,20 @@ To compile the program just type `make` in work directory.
 To encode `fq` file type:
 
 ```
-./result.out -e fasta.fq
+./mgiver.out -e fasta.fq
 ```
 
 Several files will appear, with `mgiver` in the name.
 
 ## Decoding
 
-To decoded `fq` file type (for expample there are `mgiver` files with prefix `fasta.fq`):
+To decode `fq` file type (for expample there are `mgiver` files with prefix `fasta.fq`):
 
 ```
-./result.out -d fasta.fq
+./mgiver.out -d fasta.fq > result.fq
 ```
+
+**NB**: result `fq` file prints to the stdout.
 
 # TODO
 
