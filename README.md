@@ -28,8 +28,9 @@ To decoded `fq` file type (for expample there are `mgiver` files with prefix `fa
 # TODO
 
 - [x] Implement **Huffman's coding**-algorithm
+  - [ ] Use `bitset` 
 - [ ] Implement **range coding**-algorithm
 - [ ] Implement **ANS**-algorithm
 - [ ] Add choice of what FASTQ-file's part encode with what algorithm
-- [ ] Add uniting all `mgiver` files with tar
-- [ ] Use `bitset` 
+- [ ] Collect all files 
+  - [ ] Collect of all files to one directory
