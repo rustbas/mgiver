@@ -3,7 +3,7 @@
 #include <cmath>
 #include <algorithm>
 
-#define BATCH_SIZE 32
+#define BATCH_SIZE 64
 
 
 unsigned sbtoi(string str){
@@ -70,10 +70,15 @@ void encode(string prefix,
     myStr += dict[ch];
   }
 
+  int truncate_size = BATCH_SIZE - myStr.size() % BATCH_SIZE;
   // myStr = string(BATCH_SIZE - myStr.size() % BATCH_SIZE, '0') + myStr;
 
+  string batch_string;
+  
   output_bin.write(myStr.data(), myStr.size());
   output_ohs << myStr.size() << endl;
+
+  output_ohs << truncate_size << endl;
   
   for (auto it: dict){
     if (it.first != '\n') {
@@ -104,6 +109,11 @@ vector<string> decode(string prefix) {
   getline(input_ohs, line);
 
   long unsigned size = stoi(line);
+  
+  getline(input_ohs, line);
+  int truncate_size;
+  truncate_size = stoi(line);
+  
   // cerr << prefix << " " << size << endl;
   
   map<string, char> reverseDict;

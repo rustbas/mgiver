@@ -7,11 +7,11 @@
 #include "huffmanCoderV2.hpp"
 #include "Coding.hpp" 
 
-#define READ_PREFIX "reads."
-#define QUAL_PREFIX "qual."
-#define HEAD_PREFIX "head."
+#define READ_SUFFIX ".reads"
+#define QUAL_SUFFIX ".qual"
+#define HEAD_SUFFIX ".head"
 
-#define SUFFIX ".mgiver"
+#define PREFIX "mgiver."
 
 long GetFileSize(string filename)
 {
@@ -80,27 +80,17 @@ int main(int argc, char *argv[]) {
     cout << "Encoding file..." << endl;
     
     HuffmanCodes(createHashmap(reads));
-    encode(READ_PREFIX+FILENAME+SUFFIX, reads, huffmanCode);
+    encode(PREFIX+FILENAME+READ_SUFFIX, reads, huffmanCode);
 
-    // while (!huffmanCode.empty())
-    //   {
-    // 	huffmanCode.erase(huffmanCode.begin());
-    //   }
-    
     huffmanCode.clear();
     
     HuffmanCodes(createHashmap(quality));    
-    encode(QUAL_PREFIX+FILENAME+SUFFIX, quality, huffmanCode);
-
-    // while (!huffmanCode.empty())
-    //   {
-    // 	huffmanCode.erase(huffmanCode.begin());
-    //   }
+    encode(PREFIX+FILENAME+QUAL_SUFFIX, quality, huffmanCode);
 
     huffmanCode.clear();
    
     HuffmanCodes(createHashmap(headers));
-    encode(HEAD_PREFIX+FILENAME+SUFFIX, headers, huffmanCode);
+    encode(PREFIX+FILENAME+HEAD_SUFFIX, headers, huffmanCode);
     
     auto stop = chrono::high_resolution_clock::now();
 
@@ -108,20 +98,20 @@ int main(int argc, char *argv[]) {
     cerr << "Compression time: " << duration.count() << " seconds" << endl;
 
     long prev_file = GetFileSize(FILENAME);
-    long new_files = GetFileSize(HEAD_PREFIX+FILENAME+SUFFIX) +
-      GetFileSize(READ_PREFIX+FILENAME+SUFFIX) +
-      GetFileSize(QUAL_PREFIX+FILENAME+SUFFIX);
+    long new_files = GetFileSize(PREFIX+FILENAME+HEAD_SUFFIX) +
+      GetFileSize(PREFIX+FILENAME+READ_SUFFIX) +
+      GetFileSize(PREFIX+FILENAME+QUAL_SUFFIX);
     cerr << "Compression ratio: " << (float) prev_file / (float) new_files << endl;
     
   } else if (string(argv[1]) == "-d") {
     cerr << "Decoding file" << endl;
     // auto res = decode(FILENAME+SUFFIX);
     
-    auto reads = decode(READ_PREFIX+FILENAME+SUFFIX);
-    auto quality = decode(QUAL_PREFIX+FILENAME+SUFFIX);
-    auto headers = decode(HEAD_PREFIX+FILENAME+SUFFIX);
+    auto reads = decode(PREFIX+FILENAME+READ_SUFFIX);
+    auto quality = decode(PREFIX+FILENAME+QUAL_SUFFIX);
+    auto headers = decode(PREFIX+FILENAME+HEAD_SUFFIX);
     
-    auto stop = chrono::high_resolution_clock::now();
+
 
     // cout << reads.size() << endl;
     // cout << headers.size() << endl;
@@ -133,6 +123,8 @@ int main(int argc, char *argv[]) {
       cout << quality[i] << endl;
     }
 
+    auto stop = chrono::high_resolution_clock::now();
+    
     auto duration = chrono::duration_cast<chrono::seconds>(stop - start);
     cerr << "Decompression time: " << duration.count() << " seconds" << endl;
   }
