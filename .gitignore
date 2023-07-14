@@ -36,4 +36,4 @@
 *.fa
 
 # Compressed files
-*.mgiver*
+*mgiver*
