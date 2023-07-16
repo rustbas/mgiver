@@ -1,5 +1,5 @@
 # mgiver
-Simple archiver. It using Huffman's algorithm to encode/decode files.
+Simple archiver for `FASTQ` files. It using Huffman's algorithm to encode/decode files.
 
 # Usage
 
