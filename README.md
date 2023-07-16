@@ -25,6 +25,7 @@ To decode `fq` file type:
 ./mgiver.out -i arch -v -d > result.fq
 ```
 
+**NB**: you have to write `arch` _without_ slash (`/`);
 **NB**: result `fq` file prints to the stdout.
 
 ## Parameters
