@@ -1,2 +1,2 @@
 all: main.cpp
-	g++ main.cpp -o mgiver.out
+	g++ main.cpp -O3 -o mgiver.out
