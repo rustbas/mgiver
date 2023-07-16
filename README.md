@@ -15,7 +15,7 @@ To encode `fq` file type:
 ./mgiver.out -e -i fasta.fq -o arch -v
 ```
 
-Several files will appear, with `mgiver` in the name.
+`arch`-folder will appear.
 
 ## Decoding
 
