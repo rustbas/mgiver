@@ -21,27 +21,27 @@ unsigned sbtoi(string str){
 
 size_t split(const std::string &txt, std::vector<std::string> &strs, char ch)
 {
-    size_t pos = txt.find( ch );
-    size_t initialPos = 0;
-    strs.clear();
+  size_t pos = txt.find( ch );
+  size_t initialPos = 0;
+  strs.clear();
 
-    // Decompose statement
-    while( pos != std::string::npos ) {
-        strs.push_back( txt.substr( initialPos, pos - initialPos ) );
-        initialPos = pos + 1;
+  // Decompose statement
+  while( pos != std::string::npos ) {
+    strs.push_back( txt.substr( initialPos, pos - initialPos ) );
+    initialPos = pos + 1;
 
-        pos = txt.find( ch, initialPos );
-    }
+    pos = txt.find( ch, initialPos );
+  }
 
-    // Add the last one
-    strs.push_back( txt.substr( initialPos, std::min( pos, txt.size() ) - initialPos + 1 ) );
+  // Add the last one
+  strs.push_back( txt.substr( initialPos, std::min( pos, txt.size() ) - initialPos + 1 ) );
 
-    return strs.size();
+  return strs.size();
 }
 
 void encode(string prefix,
-	  vector<string> arr,
-	  map<char, string> dict) {
+	    vector<string> arr,
+	    map<char, string> dict) {
 
   fstream output_bin(prefix, ios_base::binary|ios_base::out);
   ofstream output_ohs(prefix + ".ohs", fstream::out);
@@ -73,6 +73,7 @@ void encode(string prefix,
   int truncate_size = BATCH_SIZE - myStr.size() % BATCH_SIZE;
   // myStr = string(BATCH_SIZE - myStr.size() % BATCH_SIZE, '0') + myStr;
 
+  int batch_num = myStr.size() / BATCH_SIZE;
   string batch_string;
   
   output_bin.write(myStr.data(), myStr.size());
@@ -120,15 +121,15 @@ vector<string> decode(string prefix) {
   vector<string> dictVec;
   
   while (getline(input_ohs, line)){
-      // cout << line << endl;
-      split(line, dictVec, ' ');
-      // cout << dictVec[0] << " " << dictVec[1] << endl;
-      if (dictVec[0] == "\\n") {
-	reverseDict[dictVec[1]] = '\n';
-      } else {
-	reverseDict[dictVec[1]] = dictVec[0][0];
-      }
+    // cout << line << endl;
+    split(line, dictVec, ' ');
+    // cout << dictVec[0] << " " << dictVec[1] << endl;
+    if (dictVec[0] == "\\n") {
+      reverseDict[dictVec[1]] = '\n';
+    } else {
+      reverseDict[dictVec[1]] = dictVec[0][0];
     }
+  }
   
   string buffer;
   buffer.resize(size);
