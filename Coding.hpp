@@ -3,9 +3,6 @@
 #include <cmath>
 #include <algorithm>
 
-#define BATCH_SIZE 64
-
-
 unsigned sbtoi(string str){
   // binary string to unsigned
   long long int size = str.size();
@@ -54,6 +51,7 @@ void encode(string dirname,
     }
 
   string str;
+  int BATCH_SIZE = 64;
 
   for (auto line: arr){
     // str = str + line + "\n";
@@ -72,7 +70,7 @@ void encode(string dirname,
   }
 
   int truncate_size = BATCH_SIZE - myStr.size() % BATCH_SIZE;
-  // myStr = string(BATCH_SIZE - myStr.size() % BATCH_SIZE, '0') + myStr;
+  // myStr = string(truncate_size, '0') + myStr;
 
   int batch_num = myStr.size() / BATCH_SIZE;
   string batch_string;
@@ -81,6 +79,7 @@ void encode(string dirname,
   output_ohs << myStr.size() << endl;
 
   output_ohs << truncate_size << endl;
+  output_ohs << batch_num << endl;
   
   for (auto it: dict){
     if (it.first != '\n') {
@@ -102,7 +101,7 @@ vector<string> decode(string dirname, string prefix) {
   
   if(!input_bin.is_open() || !input_ohs.is_open())
     {
-      cout<<"Unable to open the file\n";
+      cerr<<"Unable to open the file\n";
       exit(1);
     }
   
@@ -113,8 +112,10 @@ vector<string> decode(string dirname, string prefix) {
   long unsigned size = stoi(line);
   
   getline(input_ohs, line);
-  int truncate_size;
-  truncate_size = stoi(line);
+  int truncate_size = stoi(line);
+
+  getline(input_ohs, line);
+  int batch_num = stoi(line);
   
   // cerr << prefix << " " << size << endl;
   
