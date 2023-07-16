@@ -12,20 +12,28 @@ To compile the program just type `make` in work directory.
 To encode `fq` file type:
 
 ```
-./mgiver.out -e fasta.fq
+./mgiver.out -e -i fasta.fq -o arch -v
 ```
 
 Several files will appear, with `mgiver` in the name.
 
 ## Decoding
 
-To decode `fq` file type (for expample there are `mgiver` files with prefix `fasta.fq`):
+To decode `fq` file type:
 
 ```
-./mgiver.out -d fasta.fq > result.fq
+./mgiver.out -i arch -v -d > result.fq
 ```
 
 **NB**: result `fq` file prints to the stdout.
+
+## Parameters
+
+- `-i` - input `fq`-file in encode / `arch`-folder in decode 
+0 `-o` - `arch`-folder
+- `-v` - verbose;
+- `-e` - encode `fq`-file
+- `-d` - decode `arch`-folder
 
 # TODO
 
@@ -35,4 +43,4 @@ To decode `fq` file type (for expample there are `mgiver` files with prefix `fas
 - [ ] Implement **ANS**-algorithm
 - [ ] Add choice of what FASTQ-file's part encode with what algorithm
 - [ ] Collect all files 
-  - [ ] Collect of all files to one directory
+  - [x] Collect of all files to one directory

@@ -7,7 +7,7 @@
 
 
 unsigned sbtoi(string str){
-
+  // binary string to unsigned
   long long int size = str.size();
   int result = 0;
   for (int i = size - 1; i > -1; i--) {
@@ -39,12 +39,13 @@ size_t split(const std::string &txt, std::vector<std::string> &strs, char ch)
   return strs.size();
 }
 
-void encode(string prefix,
+void encode(string dirname,
+	    string prefix,
 	    vector<string> arr,
 	    map<char, string> dict) {
 
-  fstream output_bin(prefix, ios_base::binary|ios_base::out);
-  ofstream output_ohs(prefix + ".ohs", fstream::out);
+  fstream output_bin(dirname + "/" + prefix, ios_base::binary|ios_base::out);
+  ofstream output_ohs(dirname + "/" + prefix + ".ohs", fstream::out);
 
   if(!output_bin.is_open() || !output_ohs.is_open())
     {
@@ -93,9 +94,9 @@ void encode(string prefix,
   output_ohs.close();
 }
 
-vector<string> decode(string prefix) {
-  fstream input_bin(prefix, ios_base::binary|ios_base::in);
-  ifstream input_ohs(prefix + ".ohs", ios::in);
+vector<string> decode(string dirname, string prefix) {
+  fstream input_bin(dirname + "/" + prefix, ios_base::binary|ios_base::in);
+  ifstream input_ohs(dirname + "/" + prefix + ".ohs", ios::in);
 
   vector<string> result;
   

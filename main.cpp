@@ -3,15 +3,16 @@
 #include <cassert>
 #include <chrono>
 #include <sys/stat.h>
+#include <filesystem>
 
 #include "huffmanCoderV2.hpp"
 #include "Coding.hpp" 
 
-#define READ_SUFFIX ".reads"
-#define QUAL_SUFFIX ".qual"
-#define HEAD_SUFFIX ".head"
+// #define READ_SUFFIX ".reads"
+// #define QUAL_SUFFIX ".qual"
+// #define HEAD_SUFFIX ".head"
 
-#define PREFIX "mgiver."
+// #define PREFIX "mgiver."
 
 long GetFileSize(string filename)
 {
@@ -47,69 +48,97 @@ void readFASTQ(string file_name,
 
 int main(int argc, char *argv[]) {
 
+  string READ_SUFFIX = ".reads";
+  string QUAL_SUFFIX = ".qual";
+  string HEAD_SUFFIX = ".head";
+
+  string PREFIX = "mgiver";
+
+
   auto start = chrono::high_resolution_clock::now();
   
   vector<string> headers;
   vector<string> reads;
   vector<string> quality;
-
-  // const string FILENAME = "mgi_R967_3M.part_001.temp.fq";
-  string FILENAME = string(argv[2]);
   
+  string FILENAME;
+  string DIRNAME;
+
+  bool verbose = false;
+  bool code; // true -- encode; false -- decode
+  
+  // Parsing arguments
+  for (int i=1; i < argc; ++i) {
+    if ((string) argv[i] == "-v") {
+      verbose = true;
+    } else if ((string) argv[i] == "-i") {
+      FILENAME = argv[++i];
+    } else if ((string) argv[i] == "-o") {
+      DIRNAME = argv[++i];
+      cout << "Directory name: " << DIRNAME << endl;
+    } else if ((string) argv[i] == "-e") {
+      code = true;
+    } else if ((string) argv[i] == "-d") {
+      code = false;
+    } else {
+      cout << argv[i] << endl;
+      exit(1);
+    }
+  }
 
   
-  // huffman test;
-  // test.createMap(&reads);
-
-  // for (auto item: test.hashmap){
-  //   if (item.first != '\n') {
-  //     cout << item.first << ":" << item.second << endl;
-  //   } else {
-  //     cout << "\\n" << ":" << item.second << endl;
-  //   };
-  // };
-
-  // cout << test.hashmap.size() << endl;
-  
-
-
   assert(("Must define option and file", argc > 2));
   
-  if (string(argv[1]) == "-e") {
+  if (code) {
     readFASTQ(FILENAME, &headers, &reads, &quality);
-    cout << "Encoding file..." << endl;
+
+    if (verbose) {
+      cerr << "Encoding file..." << endl;
+    }
+
+    // struct stat sb;
+    // assert(("Folder already exists!", stat(DIRNAME, &sb)) != 0);
+
+    filesystem::create_directory(DIRNAME);
     
     HuffmanCodes(createHashmap(reads));
-    encode(PREFIX+FILENAME+READ_SUFFIX, reads, huffmanCode);
-
+    encode(DIRNAME, PREFIX+READ_SUFFIX, reads, huffmanCode);
     huffmanCode.clear();
     
     HuffmanCodes(createHashmap(quality));    
-    encode(PREFIX+FILENAME+QUAL_SUFFIX, quality, huffmanCode);
-
+    encode(DIRNAME, PREFIX+QUAL_SUFFIX, quality, huffmanCode);
     huffmanCode.clear();
    
     HuffmanCodes(createHashmap(headers));
-    encode(PREFIX+FILENAME+HEAD_SUFFIX, headers, huffmanCode);
+    encode(DIRNAME, PREFIX+HEAD_SUFFIX, headers, huffmanCode);
+    // huffmanCode.clear();
     
     auto stop = chrono::high_resolution_clock::now();
 
     auto duration = chrono::duration_cast<chrono::seconds>(stop - start);
-    cerr << "Compression time: " << duration.count() << " seconds" << endl;
+    if (verbose) {
+      cerr << "Compression time: " << duration.count() << " seconds" << endl;
+    }
 
     long prev_file = GetFileSize(FILENAME);
-    long new_files = GetFileSize(PREFIX+FILENAME+HEAD_SUFFIX) +
-      GetFileSize(PREFIX+FILENAME+READ_SUFFIX) +
-      GetFileSize(PREFIX+FILENAME+QUAL_SUFFIX);
-    cerr << "Compression ratio: " << (float) prev_file / (float) new_files << endl;
+    long new_files = GetFileSize(DIRNAME + "/" + PREFIX+HEAD_SUFFIX) +
+      GetFileSize(DIRNAME + "/" + PREFIX+READ_SUFFIX) +
+      GetFileSize(DIRNAME + "/" + PREFIX+QUAL_SUFFIX);
+
+    if (verbose) {
+      cerr << "Compression ratio: " << (float) prev_file / (float) new_files << endl;
+    }
     
-  } else if (string(argv[1]) == "-d") {
-    cerr << "Decoding file" << endl;
+  } else {
+
+    if (verbose) {
+      cerr << "Decoding file" << endl;
+    }      
     // auto res = decode(FILENAME+SUFFIX);
     
-    auto reads = decode(PREFIX+FILENAME+READ_SUFFIX);
-    auto quality = decode(PREFIX+FILENAME+QUAL_SUFFIX);
-    auto headers = decode(PREFIX+FILENAME+HEAD_SUFFIX);
+    auto reads = decode(FILENAME, PREFIX+READ_SUFFIX);
+    auto quality = decode(FILENAME, PREFIX+QUAL_SUFFIX);
+    auto headers = decode(FILENAME, PREFIX+HEAD_SUFFIX);
     
 
 
@@ -126,7 +155,9 @@ int main(int argc, char *argv[]) {
     auto stop = chrono::high_resolution_clock::now();
     
     auto duration = chrono::duration_cast<chrono::seconds>(stop - start);
-    cerr << "Decompression time: " << duration.count() << " seconds" << endl;
+    if (verbose) {
+      cerr << "Decompression time: " << duration.count() << " seconds" << endl;
+    }
   }
 
   
