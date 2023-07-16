@@ -75,7 +75,6 @@ int main(int argc, char *argv[]) {
       FILENAME = argv[++i];
     } else if ((string) argv[i] == "-o") {
       DIRNAME = argv[++i];
-      cout << "Directory name: " << DIRNAME << endl;
     } else if ((string) argv[i] == "-e") {
       code = true;
     } else if ((string) argv[i] == "-d") {

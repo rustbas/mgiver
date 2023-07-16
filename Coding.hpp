@@ -2,6 +2,9 @@
 #include <filesystem>
 #include <cmath>
 #include <algorithm>
+#include <bitset>
+
+const int BATCH_SIZE = 64;
 
 unsigned sbtoi(string str){
   // binary string to unsigned
@@ -51,7 +54,7 @@ void encode(string dirname,
     }
 
   string str;
-  int BATCH_SIZE = 64;
+
 
   for (auto line: arr){
     // str = str + line + "\n";
@@ -70,12 +73,23 @@ void encode(string dirname,
   }
 
   int truncate_size = BATCH_SIZE - myStr.size() % BATCH_SIZE;
-  // myStr = string(truncate_size, '0') + myStr;
-
+  myStr = string(truncate_size, '0') + myStr;
+  
   int batch_num = myStr.size() / BATCH_SIZE;
   string batch_string;
+
+  unsigned long n;
+  string temp_string;
+  for (int i=0;i<batch_num;++i) {
+    temp_string = myStr.substr(i*BATCH_SIZE, BATCH_SIZE);
+
+    bitset<BATCH_SIZE> temp_b(temp_string);
+
+    n = temp_b.to_ulong();
+    output_bin.write(reinterpret_cast<const char*>(&n), sizeof(n));
+  }
   
-  output_bin.write(myStr.data(), myStr.size());
+  // output_bin.write(myStr.data(), myStr.size());
   output_ohs << myStr.size() << endl;
 
   output_ohs << truncate_size << endl;
@@ -121,7 +135,7 @@ vector<string> decode(string dirname, string prefix) {
   
   map<string, char> reverseDict;
   vector<string> dictVec;
-  
+
   while (getline(input_ohs, line)){
     // cout << line << endl;
     split(line, dictVec, ' ');
@@ -134,9 +148,21 @@ vector<string> decode(string dirname, string prefix) {
   }
   
   string buffer;
-  buffer.resize(size);
+  // buffer.resize(size);
 
-  input_bin.read(&buffer[0],  buffer.size() );
+  unsigned long n;
+
+  for (int i=0; i<batch_num; ++i){
+    input_bin.read(reinterpret_cast<char*>(&n), sizeof(n));
+    bitset<BATCH_SIZE> temp_b;
+
+    temp_b = n;
+    buffer += temp_b.to_string();
+  }
+
+  buffer.erase(0, truncate_size);
+  
+  // input_bin.read(&buffer[0],  buffer.size() );
   
   string word;
   line = "";
