@@ -26,6 +26,7 @@ To decode `fq` file type:
 ```
 
 **NB**: you have to write `arch` _without_ slash (`/`);
+
 **NB**: result `fq` file prints to the stdout.
 
 ## Parameters
