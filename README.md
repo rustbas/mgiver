@@ -42,7 +42,8 @@ To decode `fq` file type:
 - [ ] Collect all files 
     - [x] Collect of all files to one directory
 - [x] Implement [Huffman's coding](https://en.wikipedia.org/wiki/Huffman_coding) algorithm
-  - [ ] Use `bitset` 
+  - [x] Use `bitset` 
+  - [ ] Fix decompression time
 - [ ] Implement **range coding**-algorithm
 - [ ] Implement **ANS**-algorithm
 - [ ] Add choice of what FASTQ-file's part encode with what algorithm
